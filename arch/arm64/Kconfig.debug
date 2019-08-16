@@ -20,4 +20,13 @@ config ARM64_RELOC_TEST
 	depends on m
 	tristate "Relocation testing module"
 
+config UNWINDER_FRAME_POINTER
+	bool "Frame pointer unwinder"
+	select FRAME_POINTER
+	help
+	  ARM64 already uses the frame pointer for unwinding kernel stack
+	  traces. We need to enable this config to enable STACK_VALIDATION.
+	  STACK_VALIDATION is needed to get objtool to do static analysis
+	  of kernel code.
+
 source "drivers/hwtracing/coresight/Kconfig"
