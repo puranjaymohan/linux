@@ -8,18 +8,23 @@
 #define _ARCH_ARM64_ASM_BUG_H
 
 #include <linux/stringify.h>
+#include <linux/objtool.h>
 
 #include <asm/asm-bug.h>
 
-#define __BUG_FLAGS(flags)				\
-	asm volatile (__stringify(ASM_BUG_FLAGS(flags)));
+#define __BUG_FLAGS(flags, extra)				\
+	asm volatile (__stringify(ASM_BUG_FLAGS(flags)) ";"	\
+		      extra);
 
 #define BUG() do {					\
-	__BUG_FLAGS(0);					\
+	__BUG_FLAGS(0, "");				\
 	unreachable();					\
 } while (0)
 
-#define __WARN_FLAGS(flags) __BUG_FLAGS(BUGFLAG_WARNING|(flags))
+#define __WARN_FLAGS(flags)					\
+do {								\
+	__BUG_FLAGS(BUGFLAG_WARNING|(flags), ASM_REACHABLE);	\
+} while (0)
 
 #define HAVE_ARCH_BUG
 
