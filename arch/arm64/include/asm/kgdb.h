@@ -12,13 +12,15 @@
 #define __ARM_KGDB_H
 
 #include <linux/ptrace.h>
+#include <linux/objtool.h>
 #include <asm/debug-monitors.h>
 
 #ifndef	__ASSEMBLY__
 
 static inline void arch_kgdb_breakpoint(void)
 {
-	asm ("brk %0" : : "I" (KGDB_COMPILED_DBG_BRK_IMM));
+	asm ("brk %0\n\t"
+	     ASM_REACHABLE : : "I" (KGDB_COMPILED_DBG_BRK_IMM));
 }
 
 extern void kgdb_handle_bus_error(void);
