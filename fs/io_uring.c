@@ -3473,6 +3473,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
 		if (req->file->f_flags & O_NONBLOCK)
 			goto done;
 		/* some cases will consume bytes even on error returns */
+		iov_iter_reexpand(iter, iter->count + iter->truncated);
 		iov_iter_revert(iter, io_size - iov_iter_count(iter));
 		ret = 0;
 		goto copy_iov;
@@ -3626,6 +3627,7 @@ done:
 	} else {
 copy_iov:
 		/* some cases will consume bytes even on error returns */
+		iov_iter_reexpand(iter, iter->count + iter->truncated);
 		iov_iter_revert(iter, io_size - iov_iter_count(iter));
 		ret = io_setup_async_rw(req, iovec, inline_vecs, iter, false);
 		if (!ret)
