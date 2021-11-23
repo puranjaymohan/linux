@@ -709,5 +709,5 @@ static int kdamond_fn(void *data)
 	nr_running_ctxs--;
 	mutex_unlock(&damon_lock);
 
-	return 0;
+	do_exit(0);
 }
