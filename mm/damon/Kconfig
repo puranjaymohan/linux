@@ -18,7 +18,7 @@ config DAMON_VADDR
 	select PAGE_IDLE_FLAG
 	help
 	  This builds the default data access monitoring primitives for DAMON
-	  that work for virtual address spaces.
+	  that works for virtual address spaces.
 
 config DAMON_DBGFS
 	bool "DAMON debugfs interface"
