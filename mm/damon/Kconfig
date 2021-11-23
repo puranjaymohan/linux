@@ -20,15 +20,6 @@ config DAMON_VADDR
 	  This builds the default data access monitoring primitives for DAMON
 	  that work for virtual address spaces.
 
-config DAMON_PADDR
-	bool "Data access monitoring primitives for the physical address space"
-	depends on DAMON && MMU
-	select PAGE_EXTENSION if !64BIT
-	select PAGE_IDLE_FLAG
-	help
-	  This builds the default data access monitoring primitives for DAMON
-	  that works for physical address spaces.
-
 config DAMON_DBGFS
 	bool "DAMON debugfs interface"
 	depends on DAMON_VADDR && DEBUG_FS
