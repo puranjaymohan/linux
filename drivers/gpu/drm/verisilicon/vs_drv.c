@@ -183,6 +183,12 @@ static const struct component_master_ops vs_drm_ops = {
 
 static struct platform_driver *drm_sub_drivers[] = {
 	&dc_platform_driver,
+
+	/* connector + encoder*/
+#ifdef CONFIG_STARFIVE_HDMI
+	&starfive_hdmi_driver,
+#endif
+
 };
 
 #define NUM_DRM_DRIVERS \
