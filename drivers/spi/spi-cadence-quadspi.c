@@ -63,6 +63,8 @@ struct cqspi_st {
 	struct platform_device	*pdev;
 	struct spi_master	*master;
 	struct clk		*clk;
+	struct clk_bulk_data	*clks;
+	int			num_clks;
 	unsigned int		sclk;
 
 	void __iomem		*iobase;
@@ -1715,6 +1717,16 @@ static int cqspi_probe(struct platform_device *pdev)
 	}
 
 	if (of_device_is_compatible(pdev->dev.of_node, "starfive,jh7110-qspi")) {
+		cqspi->num_clks = devm_clk_bulk_get_all(dev, &cqspi->clks);
+		if (cqspi->num_clks < 0) {
+			dev_err(dev, "Cannot claim clock: %u\n", cqspi->num_clks);
+			return -EINVAL;
+		}
+
+		ret = clk_bulk_prepare_enable(cqspi->num_clks, cqspi->clks);
+		if (ret)
+			dev_err(dev, "Cannot enable clock clks\n");
+
 		rstc_ref = devm_reset_control_get_optional_exclusive(dev, "rstc_ref");
 		if (IS_ERR(rstc_ref)) {
 			ret = PTR_ERR(rstc_ref);
@@ -1819,6 +1831,9 @@ static void cqspi_remove(struct platform_device *pdev)
 
 	clk_disable_unprepare(cqspi->clk);
 
+	if (of_device_is_compatible(pdev->dev.of_node, "starfive,jh7110-qspi"))
+		clk_bulk_disable_unprepare(cqspi->num_clks, cqspi->clks);
+
 	pm_runtime_put_sync(&pdev->dev);
 	pm_runtime_disable(&pdev->dev);
 }
@@ -1834,6 +1849,9 @@ static int cqspi_suspend(struct device *dev)
 
 	clk_disable_unprepare(cqspi->clk);
 
+	if (of_device_is_compatible(dev->of_node, "starfive,jh7110-qspi"))
+		clk_bulk_disable_unprepare(cqspi->num_clks, cqspi->clks);
+
 	return ret;
 }
 
@@ -1843,6 +1861,8 @@ static int cqspi_resume(struct device *dev)
 	struct spi_master *master = dev_get_drvdata(dev);
 
 	clk_prepare_enable(cqspi->clk);
+	if (of_device_is_compatible(dev->of_node, "starfive,jh7110-qspi"))
+		clk_bulk_prepare_enable(cqspi->num_clks, cqspi->clks);
 	cqspi_wait_idle(cqspi);
 	cqspi_controller_init(cqspi);
 
