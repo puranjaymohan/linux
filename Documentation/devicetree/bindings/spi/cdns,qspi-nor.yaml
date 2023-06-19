@@ -26,6 +26,15 @@ allOf:
             const: starfive,jh7110-qspi
     then:
       properties:
+        clocks:
+          maxItems: 3
+
+        clock-names:
+          items:
+            - const: ref
+            - const: ahb
+            - const: apb
+
         resets:
           minItems: 2
           maxItems: 3
@@ -38,6 +47,9 @@ allOf:
 
     else:
       properties:
+        clocks:
+          maxItems: 1
+
         resets:
           maxItems: 2
 
@@ -70,7 +82,13 @@ properties:
     maxItems: 1
 
   clocks:
-    maxItems: 1
+    maxItems: 3
+
+  clock-names:
+    items:
+      - const: ref
+      - const: ahb
+      - const: apb
 
   cdns,fifo-depth:
     description:
