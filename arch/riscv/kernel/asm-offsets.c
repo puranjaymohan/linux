@@ -506,4 +506,7 @@ void asm_offsets(void)
 	DEFINE(FREGS_A6,	    offsetof(struct ftrace_regs, a6));
 	DEFINE(FREGS_A7,	    offsetof(struct ftrace_regs, a7));
 #endif
+#ifdef CONFIG_FUNCTION_TRACER
+	DEFINE(FTRACE_OPS_FUNC,	    offsetof(struct ftrace_ops, func));
+#endif
 }
