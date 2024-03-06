@@ -9,6 +9,7 @@
 int patch_text_nosync(void *addr, const void *insns, size_t len);
 int patch_text_set_nosync(void *addr, u8 c, size_t len);
 int patch_text(void *addr, u32 *insns, int ninsns);
+int riscv_insn_write_literal_u64(void *addr, u64 val);
 
 extern int riscv_patch_in_stop_machine;
 

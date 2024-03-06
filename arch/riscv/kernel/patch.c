@@ -63,6 +63,20 @@ static void patch_unmap(int fixmap)
 }
 NOKPROBE_SYMBOL(patch_unmap);
 
+noinstr int riscv_insn_write_literal_u64(void *addr, u64 val)
+{
+	u64 *waddr;
+	int ret;
+
+	waddr = patch_map(addr, FIX_TEXT_POKE0);
+
+	ret = copy_to_kernel_nofault(waddr, &val, sizeof(val));
+
+	patch_unmap(FIX_TEXT_POKE0);
+
+	return ret;
+}
+
 static int __patch_insn_set(void *addr, u8 c, size_t len)
 {
 	void *waddr = addr;
