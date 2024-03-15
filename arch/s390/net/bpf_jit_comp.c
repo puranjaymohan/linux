@@ -2691,3 +2691,8 @@ bool bpf_jit_supports_subprog_tailcalls(void)
 {
 	return true;
 }
+
+u64 bpf_arch_uaddress_limit(void)
+{
+	return -ENOTSUPP;
+}
