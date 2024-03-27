@@ -101,7 +101,7 @@ static const struct ftrace_ops *riscv64_rec_get_ops(struct dyn_ftrace *rec)
 static int ftrace_rec_set_ops(const struct dyn_ftrace *rec,
 			      const struct ftrace_ops *ops)
 {
-	unsigned long literal = rec->ip - 8;
+	unsigned long literal = rec->ip - 16;
 
 	return riscv_insn_write_literal_u64((void *)literal,
 					    (unsigned long)ops);

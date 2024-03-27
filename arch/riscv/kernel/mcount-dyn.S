@@ -212,7 +212,7 @@
 	 * so we find the associated op at t0-16.
 	 */
 	mv 	a1, ra				// parent_ip
-	REG_L   a2, -16(t0)			// op
+	REG_L   a2, -24(t0)			// op
 	REG_L   ra, FTRACE_OPS_FUNC(a2)		// op->func
 #else
 	la	a1, function_trace_op
@@ -231,7 +231,7 @@ SYM_FUNC_START(ftrace_caller)
 	addi	a0, t0, -FENTRY_RA_OFFSET
 #ifdef CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
 	mv      a1, ra                          // parent_ip
-	REG_L   a2, -16(t0)                     // op
+	REG_L   a2, -24(t0)                     // op
 	REG_L   ra, FTRACE_OPS_FUNC(a2)         // op->func
 #else
 	la	a1, function_trace_op
