@@ -291,6 +291,12 @@ config SAMPLE_CGROUP
 	help
 	  Build samples that demonstrate the usage of the cgroup API.
 
+config SAMPLE_SMP_PROCESSOR_ID
+	tristate "Build a benchmark for smp_processor_id()"
+	help
+	  This builds a bechmark that calls smp_processor_id() a given
+	  number of times and calculates the runtime overhead.
+
 source "samples/rust/Kconfig"
 
 endif # SAMPLES
